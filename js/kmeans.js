@@ -1,4 +1,4 @@
-const NUM_POINTS = 1000;
+const NUM_POINTS = 5000;
 let randomless = $("input#myRange.slider").val();
 const width = $("#kmeans-demo").width();
 const height = width;
@@ -208,3 +208,7 @@ function calcDistance(point1, point2) {
     Math.pow(point1[0] - point2[0], 2) + Math.pow(point1[1] - point2[1], 2)
   );
 }
+
+$('#run').on("click", function () {
+  $('#order')["0"].innerText = +$('#order')["0"].innerText + 1;
+});
