@@ -6,7 +6,7 @@
     margin-top: 10px;
 }
 .slidecontainer {
-    width: 50%; /* Width of the outside container */
+    width: 80%; /* Width of the outside container */
 }
 
 .slider {
@@ -37,4 +37,15 @@
     border-radius: 50%;
     background: #4CAF50;
     cursor: pointer;
+}
+
+body {
+    font-family: 'Amatic SC', cursive;
+    font-weight: bold;
+    font-size: 19px;  
+}
+
+@font-face {
+    font-family: 'HandDraw';
+    src: url('fonts/font.woff2') format('woff2');
 }

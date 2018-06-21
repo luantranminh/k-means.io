@@ -3,6 +3,8 @@ let randomless = $("input#myRange.slider").val();
 const width = $("#kmeans-demo").width();
 const height = width;
 let numCentroids = $(".centroids input").val();
+let numClusters = $(".clusters input").val();
+
 let points = [];
 let centroids = [];
 let colors = [
@@ -35,7 +37,7 @@ centroidsGroup = svg.append("g").attr("id", "centroids");
 
 $("#myRange").on("input", function(e) {
   randomless = $(e.target).val();
-  visualizingPoints();
+  showPoints();
   coloringPoints();
 });
 
@@ -67,9 +69,6 @@ function generateCluster() {
     .attr("fill", function() {
       return randomColor();
     });
-
-  console.log(colorIndex);
-  console.log(randomColor());
 }
 
 //
@@ -93,7 +92,7 @@ function resetPoints() {
   points = [];
 
   let stddev = randomless / 2 + 15;
-  let cluster = 4;
+  let cluster = numClusters;
   let tempX = 0;
   let tempY = 0;
 
@@ -118,43 +117,63 @@ function resetPoints() {
   }
 }
 
+// this function assign each point into their group by Euclidean distance
+// distance(x1,centroid(cluster2)) < distance(x1,centroid(cluster1)) < distance(x1,centroid(cluster3))
+// thus, x1 belong to cluster2, x1 filled same color with centroid2
 function coloringPoints() {
   circles = $("#points circle");
   triangles = $("#centroids path");
   for (let i = 0; i < circles.length; i++) {
+    //get coordinate of point;
     let xCircle = circles[i].getAttribute("cx");
     let yCircle = circles[i].getAttribute("cy");
     let coord = [xCircle, yCircle];
 
-    let xCentroid = triangles[0].getAttribute("transform").slice(9).replace(/\((.+),(.+)\)/,  '$1');
-    let yCentroid = triangles[0].getAttribute("transform").slice(9).replace(/\((.+),(.+)\)/,  '$2');
+    let xCentroid = triangles[0].__data__[0];
+    let yCentroid = triangles[0].__data__[1];
+    let tempCentroid = [xCentroid, yCentroid];
 
-    let tempCentroid = [parseFloat(xCentroid), parseFloat(yCentroid)];
     let minDistance = calcDistance(coord,tempCentroid);
     let centroid = triangles[0];
+    
     for (let j = 0; j < triangles.length; j++) {
-      xCentroid = triangles[j].getAttribute("transform").slice(9).replace(/\((.+),(.+)\)/,  '$1');
-      yCentroid = triangles[j].getAttribute("transform").slice(9).replace(/\((.+),(.+)\)/,  '$2');
-      tempCentroid = [parseFloat(xCentroid), parseFloat(yCentroid)];
-
+      // xCentroid = triangles[j].getAttribute("transform").slice(9).replace(/\((.+),(.+)\)/,  '$1');
+      xCentroid = triangles[j].__data__[0];
+      yCentroid = triangles[j].__data__[1];
+      coord = [xCircle, yCircle];
+      tempCentroid = [xCentroid, yCentroid];
+      
       if (calcDistance(coord,tempCentroid) < minDistance) {
+        minDistance = calcDistance(coord,tempCentroid);
         centroid = triangles[j];
       }
     }
-
-    circles[i].setAttribute("fill", centroid.getAttribute("fill"));
-
+    circles[i].setAttribute("fill", centroid.attributes[2].nodeValue);
   }
 }
 
-function visualizingPoints() {
+function showPoints() {
   resetPoints();
   createPoints();
 }
 
 generateCluster();
-visualizingPoints();
+showPoints();
 coloringPoints();
+
+function reset() {
+  numCentroids = $(".centroids input").val();
+  numClusters = $(".clusters input").val();
+  randomless = $("input#myRange.slider").val();
+  showPoints();
+  generateCluster();
+  showPoints();
+  coloringPoints();
+}
+
+$('#reset').on("click", function () {
+  reset();
+})
 function averageXY(points) {
   let avgX = 0;
   let avgY = 0;
@@ -181,7 +200,7 @@ function normalVal(normalFn) {
 }
 
 function randomColor() {
-  return colors[colorIndex >= colors.length ? (colorIndex = 0) : colorIndex++];
+  return colors[colorIndex < colors.length ? ++colorIndex : (colorIndex = 0)];
 }
 
 function calcDistance(point1, point2) {
