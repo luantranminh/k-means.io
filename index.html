@@ -27,25 +27,37 @@
                 </div>
                 <br>
                 <div class="clusters">
-                    <span>Số cụm</span>
+                    <span>Số cụm (với dữ liệu ban đầu)</span>
                     <input type="number" min="0" max="50" value="2" style="width: 50px; font-weight: 700">
                 </div>
                 <br>
                 <div class="centroids">
-                    <span>Số tâm</span>
+                    <span>Số tâm (gom cụm với kết quả)</span>
                     <input type="number" min="0" max="10" value="5" style="width: 50px; font-weight: 700">
                 </div>
                 <br>
-                <wired-button id="reset">Gắn dữ liệu</wired-button>
-                
+                <wired-button id="run" style="margin-right: 10px;">Chạy thuật toán lần <span id="order">1</span></wired-button>
+                <wired-button id="reset">Điều chỉnh dữ liệu</wired-button>
                 <br>
                 <br>
                 <div class="paragraph">
                     <p>
-                        Mình sẽ viết một số thứ ở đây về K-Means, đây là một thuật toán khá là dễ trong data mining 
-                        mình đã được đọc về nó trong bài viết của python nói về thuật toán náy, ví dụ đơn giản có thể thấy
-                        lợi ích của thuật toán này là gom cụm các điểm màu giống nhau, từ đó gom các điểm màu giống nhau lại 
-                        và giảm dung lượng của bức ảnh.
+                        Các bước trong thuật toán K-means. Cho trước dữ liệu là 5000 điểm.
+                    </p>
+                    <p>
+                        Bước 1: Chọn ngẫu nhiên tọa độ của tâm cho mỗi cụm (muốn phân dữ liệu thành bao nhiêu cụm thì chọn bấy nhiêu tâm).
+                    </p>
+                    <p>
+                        Bước 2: Với mỗi điểm, tìm tâm gần nó nhất bằng khoảng cách Euclid, gắn điểm đó cho cụm đó.
+                    </p>
+                    <p>
+                        Bước 3: Tính lại tâm của mỗi cụm. Giả sử cụm đó có tâm c(a,b) được chọn ngẫu nhiên ở bước 1 và có 2 điểm k1(x1,y1) và 
+                        k2(x2,y2) thì tâm được gán lại bằng c((x1 + x2) / 2, (y1 + y2) / 2).
+                    </p>
+                    <p>
+                        Bước 4: Quay lại bước 2, thuật toán được dừng khi các điểm không còn thay đổi cụm hoặc điểm thay đổi vô tận qua lại giữa các cụm
+                        (điểm k1(x,y) lần duyệt thứ 9 ở cụm 1, các điểm khác không đổi, lần duyệt thứ 10 k1 ở cụm 2, các điểm khác không đổi, lần duyệt thứ
+                        11 k1 ở cụm 1, các cụm khác không đổi => dừng)
                     </p>
                 </div>
             </div>
