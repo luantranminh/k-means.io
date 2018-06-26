@@ -188,6 +188,7 @@ function reset() {
 
 $("#reset").on("click", function() {
   reset();
+  $("#order")["0"].innerText = 1;
 });
 
 //find the average x value and average y value of all the points
