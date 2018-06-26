@@ -55,7 +55,8 @@ function generateCluster() {
     .data(centroids)
     .enter()
     .append("path")
-    .style("stroke-width", "2")
+    .style("stroke-width", "0.5")
+    .style("stroke", "black")
     .attr("transform", function(d) {
       return "translate(" + d[0] + "," + d[1] + ")";
     })
@@ -199,16 +200,22 @@ function normalVal(normalFn) {
   return num > 3 && num < width - 3 ? num : normalVal(normalFn);
 }
 
+//get random color form array colors 
 function randomColor() {
   return colors[colorIndex < colors.length ? ++colorIndex : (colorIndex = 0)];
 }
 
+//calculator for two points
 function calcDistance(point1, point2) {
   return Math.sqrt(
     Math.pow(point1[0] - point2[0], 2) + Math.pow(point1[1] - point2[1], 2)
   );
 }
 
+
+//set a counter for "run algorithm" button
 $('#run').on("click", function () {
   $('#order')["0"].innerText = +$('#order')["0"].innerText + 1;
 });
+
+
